@@ -1,0 +1,13 @@
+*.ecert
+*.spill
+*.exe
+*.o
+*.out
+verify_ecert
+verify_ecert_hardened
+exact_tiler_adaptive
+exact_tiler_lowmem
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
