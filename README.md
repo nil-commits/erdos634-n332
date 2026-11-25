@@ -4,7 +4,7 @@ This repository contains the adaptive multi-threaded exact-arithmetic $\mathbb{Q
 
 ## Scope and Limitations
 
-- **Full Erdős Problem #634 remains open.** This repository settles $N = 332$ (previously undecided in Vico Bonfioli's v6.0 release `ElVec1o/erdos634_primes_and_N200`, 18 Nov 2026), reducing the undecided count $\le 1000$ from `26` (after $N = 236$ in `nil-commits/erdos634-n236`) to `25`.
+- **Full Erdős Problem #634 remains open.** Relative to Vico Bonfioli's v6.0 release (`ElVec1o/erdos634_primes_and_N200`, 18 Nov 2026, `27` undecided $N \le 1000$) and our independent $N = 236$ confirmation (`nil-commits/erdos634-n236`), this repository settles $N = 332$ (`26 → 25`). Independently, **Denis Paliy** (`DenisUkranian/erdos-634-tilings`, 19 Nov 2026) publicly excluded $N = 236$ ($T_2(4, 5)$) and exhibited a 280-tile dissection of `(90, 90, 140)` by `(5, 6, 9)` ($N = 280$). Thus $N = 332$ is the **#2 smallest publicly open** integer in Erdős #634 (behind $N = 284$), reducing the publicly undecided count $\le 1000$ from `25` to **`24`**.
 - **Not Lean-kernel verified:** The refutation of $T_2(5, 6)$ is an **exact-arithmetic computer-certified refutation (`ECERT_V1`)**, checked independently from scratch by our zero-float, zero-trig, `__int128` overflow-trapped C++ verifier (`verify_ecert_hardened.cpp`, with negative controls rejecting corrupted proofs). It has **not** been replayed inside the Lean 4 kernel.
 - **Dependence on classification:** Concluding $\neg\operatorname{TileCount}(332)$ from the refutation of $T_2(5, 6)$ depends on the Laczkovich–Beeson–Bonfioli 15-branch classification of congruent triangle dissections (`audit_frontier_15_leaves.py` closes 14 of 15 branches analytically for $N = 332$, leaving $T_2(5, 6)$ as the unique surviving branch).
 
@@ -20,7 +20,7 @@ This repository contains the adaptive multi-threaded exact-arithmetic $\mathbb{Q
 | `verify_ecert.py` | Independent pure-Python arbitrary-precision `fractions.Fraction` cross-verifier |
 | `audit_frontier_15_leaves.py` | Zero-truncation 15-branch Laczkovich–Beeson–Bonfioli classification audit across all 27 undecided $N \le 1000$ |
 | `audit_ecert_headroom_and_pycheck.py` | Streaming `__int128` coordinate & headroom scanner for large `.ecert` files |
-| `REPORT.md` | Full technical report (including partial progress on $N = 284$ and 3-branch analysis of $N = 280$) |
+| `REPORT.md` | Full technical report (including Paliy's Nov 19 resolution of $N = 280$ and partial progress on $N = 284$) |
 | `LICENSE` | MIT License |
 
 ---
@@ -74,10 +74,15 @@ Verifying ECERT_V1 for T_2(5,6) N=332 (corrupt_mode=0)...
   Elapsed: 1826.34s
 ```
 
-### Negative-Control Rejection
+*(Metrics note: `44,841,481` total verified nodes = `44,840,088` DAG nodes + `1,393` non-`F` prefix nodes; runtime `max_p = 24` is the C++ verifier's $\mathbb{Q}[\zeta]$ power ceiling during exact evaluation, while stored `.ecert` vertices have `max_p = 15`. An independent `rh-lean-hub` audit run of `corrupt_mode = 0` also passed identically in `1866.08s`.)*
 
-- `corrupt_mode = 1` (dropped branch child): `FAIL: prefix/subproof failed for apex (2,2,2)` (`102.81s`, `EXIT_CODE=1`)
-- `corrupt_mode = 2` (corrupted leaf): `FAIL: prefix/subproof failed for apex (2,2,2)` (`103.48s`, `EXIT_CODE=1`)
+### Negative-Control Rejection (`5/5` Modes Rejected, `g++ 13.3.0` on `rh-lean-hub`)
+
+- `corrupt_mode = 1` (dropped branch child): `FAIL` (`119.06s`, `EXIT_CODE=1`)
+- `corrupt_mode = 2` (corrupted leaf): `FAIL` (`120.99s`, `EXIT_CODE=1`)
+- `corrupt_mode = 3` (corrupted nogood): `FAIL` (`121.70s`, `EXIT_CODE=1`)
+- `corrupt_mode = 4` (malformed/bounds corruption): `FAIL` (`1.74s`, `EXIT_CODE=1`)
+- `corrupt_mode = 5` (missing apex `(3,2,3)`): `FAIL: missing apex case (3,2,3)` (`1731.95s`, `EXIT_CODE=1`)
 - Unhardened baseline verifier (`verify_ecert` on Windows): `PASS` across all 4 apexes (`224.10s`, `44,840,088` DAG nodes, `1,558,706` nogoods; `corrupt_mode=1,2` rejected in `16.25s`, `16.26s`).
 
 ### 15-Branch Classification Audit

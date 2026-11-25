@@ -1,8 +1,8 @@
 """
-verify_ecert.py (Hardened Release Copy — Erdős #634 N=236 & T_2(3,5))
+verify_ecert.py (Hardened Release Copy — Erdős #634 ECERT_V1, e.g. T_2(5,6) N=332)
 100% Independent Pure-Python Exact-Rational (fractions.Fraction) Verifier for .ecert certificates!
 ZERO floating point, ZERO C++, arbitrary-precision Python integers!
-Used as a second completely independent language/runtime cross-check alongside verify_ecert.cpp.
+Used as a second completely independent language/runtime cross-check alongside verify_ecert_hardened.cpp.
 Includes strict malformed-input bounds checks and seen_apex[2][2] duplicate/completeness checks.
 """
 import math, sys, time

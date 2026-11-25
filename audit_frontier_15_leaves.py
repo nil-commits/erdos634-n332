@@ -2,7 +2,7 @@
 audit_frontier_15_leaves.py
 Exhaustive, zero-truncation mathematical audit of ALL 15 branches of the
 Laczkovich / Beeson / Bonfioli classification of congruent triangle dissections
-for N = 280 (and other small frontier open N <= 650).
+across all 27 Bonfioli v6.0 undecided N <= 1000 (including N = 332).
 
 Includes exact squarefree-part handling for S2, S3, F1, Iso120, F2, F3, F4,
 E120, E60 (via Theorem A), G (via Theorem D'), S1 (T_M), S4 (W_M), S5 (theta_t).
@@ -270,8 +270,8 @@ def verify_15_leaves(N):
             if e2 > 0 and is_sq(e2):
                 e = math.isqrt(e2)
                 if 1 <= e < f and math.gcd(e, f) == 1:
-                    if M == 1 or 2*M*e < f or (e == 1 and 2*M <= f) or (e >= 2 and M >= 2 and f <= 2*M*e < f + e):
-                        print(f"      (T_{M}({e},{f}) EXCLUDED by M=1 / 2Me<f / BandThm)")
+                    if M == 1 or 2*M*e < f or (e == 1 and 2*M <= f):
+                        print(f"      (T_{M}({e},{f}) EXCLUDED by M=1 / 2Me<f)")
                     else:
                         s1_open.append(f"T_{M}({e},{f})")
     print(f"  [15] S1 (T_M(e,f)):               {'CLOSED' if not s1_open else 'OPEN -> ' + str(s1_open)}")
@@ -280,5 +280,10 @@ def verify_15_leaves(N):
     print(f"  >>> TOTAL SURVIVING BRANCHES FOR N={N}: {surviving}")
     return surviving
 
-for N in [280, 284, 332, 351, 423, 444, 524, 531, 552, 594, 644]:
-    verify_15_leaves(N)
+if __name__ == "__main__":
+    BONFIOLI_V6_UNDECIDED_LE_1000 = [
+        236, 280, 284, 332, 351, 423, 444, 524, 531, 552, 594, 644, 668, 716,
+        732, 747, 816, 840, 855, 876, 880, 908, 912, 924, 927, 944, 999,
+    ]
+    for N in BONFIOLI_V6_UNDECIDED_LE_1000:
+        verify_15_leaves(N)

@@ -1,13 +1,13 @@
 """
 audit_ecert_headroom_and_pycheck.py
-1. Scans EVERY line of an ECERT_V1 certificate (streaming, low RAM) to compute exact
-   max_p, max |x|, max |y|, and exact __int128 overflow headroom ratio across ALL 4 apexes!
-2. Runs pure-Python arbitrary-precision fractions.Fraction cross-verification (importing
-   ExactQzetaVerifier from ppl079_236/verify_ecert.py or streaming first N subproofs / full Apex 1)
-   so we have dual-language zero-float verification!
+Streams EVERY line of an ECERT_V1 certificate in low RAM to compute exact
+stored-vertex max_p, max |x|, max |y|, and a conservative orient_exact
+__int128 overflow headroom ratio across all apexes.
+
+For standalone pure-Python arbitrary-precision fractions.Fraction proof
+cross-verification, see verify_ecert.py.
 """
 import sys, os, time
-from fractions import Fraction
 
 def audit_headroom(path):
     t0 = time.time()
@@ -52,7 +52,7 @@ def audit_headroom(path):
     ratio = orient_prod_bound / i128_max
     print(f"=== HEADROOM AUDIT: {os.path.basename(path)} (T_{M}({e},{f_val})) ===")
     print(f"  Apexes: {len(apex_stats)} -> {apex_stats}")
-    print(f"  max_p = {max_p}, max |x|,|y| = {max_abs}")
+    print(f"  stored vertex max_p = {max_p}, max |x|,|y| = {max_abs}")
     print(f"  conservative orient_exact product bound = {orient_prod_bound:.3e} vs i128_max = {i128_max:.3e}")
     print(f"  __int128 headroom ratio = {ratio:.3e} ({'SAFE' if ratio < 1e-6 else 'CHECK!'})")
     print(f"  Scan elapsed: {time.time() - t0:.2f}s")
